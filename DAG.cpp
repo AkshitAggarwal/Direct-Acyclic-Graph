@@ -1,3 +1,19 @@
+/**********************************************************************
+**  DAG.cpp
+**
+**	Generating DAG using random 100,000 vertices and 99,999 edges
+**
+**	Version 1.0
+**
+**  Copyright (C) 2018 Iti Shree
+**
+**	This program is free software: you can redistribute it and/or
+**	modify it under the terms of the GNU General Public License
+**	as published by the Free Software Foundation, either version
+**	2 of the License, or (at your option) any later version.
+**
+**********************************************************************/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -79,8 +95,8 @@ void list_id(int id)
     }
 }
 
-/* Function for prinitng list of children with either true/false valued
-   vertex */
+/* Function for prinitng list of children with either true/false 
+valued vertex */
 void conditional_list(bool flag)
 {
     for (int i = 1; i < MAX; ++i)
@@ -93,8 +109,8 @@ void conditional_list(bool flag)
         printf("\n");
     }
 }
-void reach_child(int k) /* Progeny (Count) for all the nodes is computed 
-                           with pre-processing in O(V)*/
+void reach_child(int k) /* Progeny (Count) for all the nodes is 
+                         computed with pre-processing in O(V)*/
 {
     if (vis[k])
         return;
@@ -107,15 +123,16 @@ void reach_child(int k) /* Progeny (Count) for all the nodes is computed
     }
 }
 
-void reach_child2(int k) /* Progeny (IDS) for kth node is stored in answer*/
+void reach_child2(int k) /* Progeny (IDS) for kth node is stored 
+                            in answer*/
 {
     answer.push_back(k);
     for (auto &it : adj[k])
         reach_child(it.id);
 }
 
-/*void reach_parent(int k) /*Ancestors (Count) for all the nodes is computed 
-                             with pre-processing in O(V)
+/*void reach_parent(int k) /*Ancestors (Count) for all the nodes is 
+                             computed with pre-processing in O(V)
 {
 	cntAncestors[k]=ct;
 	ct++;
