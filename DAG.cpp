@@ -42,7 +42,7 @@ struct vertex
     vertex() {}
     vertex(int _id, string _hex_id, string _parent, bool _flag)
     {
-        id = id;
+        id = _id;
         hex_id = _hex_id;
         parent = _parent;
         flag = _flag; 
