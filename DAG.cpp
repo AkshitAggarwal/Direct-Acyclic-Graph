@@ -1,15 +1,22 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int MAX = 1000;
+const int MAX = 1e5;
 
-bool random() {
+/* For generating random value of flag */
+bool random_flag()
+{
     if (rand() % 2 == 0)
         return true;
-    else return false;
+    else
+        return false;
 }
 
-int myrandom (int i) { return std::rand()%i;}
+/* For generating random value */
+int myrandom(int i) 
+{ 
+    return rand() % i; 
+}
 
 struct vertex
 {
@@ -22,91 +29,93 @@ struct vertex
         id = id;
         hex_id = hex_id;
         parent = parent;
-        flag = flag;
+        flag = flag; 
     }
 };
 
 vector<vertex> adj[MAX];
-int subtree[MAX], vis[MAX], cntAncestors[MAX];;
+int subtree[MAX], vis[MAX], cntAncestors[MAX];
+;
 int cnt[MAX];
 
 vector<int> ancestors[MAX];
 vector<int> rec_stack;
 
-int ct=0;
+int ct = 0;
 vector<int> answer;
 
-/*void addEdge(vector<int> adj[], int u, int v)
-{
-   // vertex (v, id, flag);
-    adj[u].push_back(v); // Add v to u's list
-}*/
-
+/* For printing Direct Acylic Graph randomly generated */
 void printDAG()
 {
     for (int i = 1; i < MAX; ++i)
     {
         printf("i \t %d] ", i);
 
-        for(auto &it:adj[i])
+        for (auto &it : adj[i])
         {
-            cout<<"->"<<it.id;
+            cout << "->" << it.id;
         }
         printf("\n");
     }
 }
 
+/* Function for prinitng list of children of required id */
 void list_id(int id)
-{   bool cond = false;
+{
+    bool cond = false;
     for (int i = 1; i < MAX; ++i)
     {
-        if( i == id)
+        if (i == id)
         {
-            for(auto &it:adj[i])
-        {
-            cout<<"->"<<it.id;
-            cond = true;
-        }
+            for (auto &it : adj[i])
+            {
+                cout << "->" << it.id;
+                cond = true;
+            }
         }
 
-        if(cond == true)
+        if (cond == true)
             break;
     }
 }
 
+/* Function for prinitng list of children with either true/false valued
+   vertex */
 void conditional_list(bool flag)
 {
     for (int i = 1; i < MAX; ++i)
     {
-            for(auto &it:adj[i])
+        for (auto &it : adj[i])
         {
-            if(it.flag == flag)
-            cout<<"->"<<it.id;
+            if (it.flag == flag)
+                cout << "->" << it.id;
         }
-         printf("\n");
+        printf("\n");
     }
 }
-void reach_child(int k) //Progeny (Count) for all the nodes is computed with pre-processing in O(V)
+void reach_child(int k) /* Progeny (Count) for all the nodes is computed 
+                           with pre-processing in O(V)*/
 {
-	if(vis[k])
-		return;
-	vis[k]=1;
-	subtree[k]=1;
-	for(auto &it:adj[k])
-	{
-		reach_child(it.id);
-		subtree[k]+=subtree[it.id];
-	}
+    if (vis[k])
+        return;
+    vis[k] = 1;
+    subtree[k] = 1;
+    for (auto &it : adj[k])
+    {
+        reach_child(it.id);
+        subtree[k] += subtree[it.id];
+    }
 }
 
-void reach_child2(int k) //Progeny (IDS) for kth node is stored in answer
+void reach_child2(int k) /* Progeny (IDS) for kth node is stored in answer*/
 {
-	answer.push_back(k);
-	for(auto &it:adj[k])
-		reach_child(it.id);
+    answer.push_back(k);
+    for (auto &it : adj[k])
+        reach_child(it.id);
 }
 
-/*void reach_parent(int k) //Ancestors (Count) for all the nodes is computed with pre-processing in O(V)
+/*void reach_parent(int k) /*Ancestors (Count) for all the nodes is computed 
+                             with pre-processing in O(V)
 {
 	cntAncestors[k]=ct;
 	ct++;
@@ -115,7 +124,7 @@ void reach_child2(int k) //Progeny (IDS) for kth node is stored in answer
 	ct--;
 }
 
-void reach_parent2(int k) //Ancestors (IDS) for kth node is stored in answer
+void reach_parent2(int k) Ancestors (IDS) for kth node is stored in answer
 {
 	while(parent[k])
 	{
@@ -126,7 +135,7 @@ void reach_parent2(int k) //Ancestors (IDS) for kth node is stored in answer
 
 int main()
 {
-    srand( time(NULL) );
+    srand(time(NULL));
 
     vector<int> left;
     vector<int> right;
@@ -154,19 +163,18 @@ int main()
         int random_vertex = right.back();
         ss << hex << random_vertex;
         string res2 = ss.str();
-        string parent ="0x";
+        string parent = "0x";
         parent.append(res2);
 
         right.pop_back();
-        bool flag = random();
+        bool flag = random_flag();
         adj[element].push_back(vertex(random_vertex, hex_id, parent, flag));
         left.push_back(random_vertex);
         element = right.back();
-
     }
 
-    int ele = rand()%MAX;
-    int flag1 = random();
+    int ele = rand() % MAX;
+    int flag1 = random_flag();
 
     char option;
     char request;
@@ -175,32 +183,38 @@ int main()
 
     do
     {
-    cout << "Enter option (h for help message)\n";
-    cin >> option;
+        cout << "Enter option (h for help message)\n";
+        cin >> option;
 
-    switch(option)
-    {
-        case 'h' : cout << "Here are your options:\n";
-                   cout << "p - print the Direct Acyclic Graph\n";
-                   cout << "c - count the children of vertex\n";
-                   cout << "l - print list of children of vertex with requested id\n";
-                   cout << "m - print list of children of vertex with true/false flags\n";
-                   cout << "h - print help message\n";
-                            exit(0);
-                            break;
-        case 'p' : printDAG();
-                   break;
-        case 'c' : cout << answer[ele];
-                   break;
-        case 'l' : list_id(ele);
-                   break;
-        case 'm' : conditional_list(flag1);
-                   break;
-        default  : cout << "Error : option not avaliable\n";
-
-    }
-    cout << "\n Want to continue?(y/n)\n";
-    cin >> request;
-    } while(request == 'y');
+        switch (option)
+        {
+        case 'h':
+            cout << "Here are your options:\n";
+            cout << "p - print the Direct Acyclic Graph\n";
+            cout << "c - count the children of vertex\n";
+            cout << "l - print list of children of vertex with requested id\n";
+            cout << "m - print list of children of vertex with true/false flags\n";
+            cout << "h - print help message\n";
+            exit(0);
+            break;
+        case 'p':
+            printDAG();
+            break;
+        case 'c':
+            cout << answer[ele];
+            break;
+        case 'l':
+            list_id(ele);
+            break;
+        case 'm':
+            conditional_list(flag1);
+            break;
+        default:
+            cout << "Error : option not avaliable\n";
+        }
+        cout << "\n Want to continue?(y/n)\n";
+        cin >> request;
+    } while (request == 'y');
+	
     return 0;
 }
