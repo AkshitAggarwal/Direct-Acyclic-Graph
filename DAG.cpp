@@ -43,7 +43,7 @@ vector<int> rec_stack;
 
 int ct = 0;
 vector<int> answer;
-
+vector<int> parent[MAX];
 /* For printing Direct Acylic Graph randomly generated */
 void printDAG()
 {
@@ -114,8 +114,8 @@ void reach_child2(int k) /* Progeny (IDS) for kth node is stored in answer*/
         reach_child(it.id);
 }
 
-/*void reach_parent(int k) /*Ancestors (Count) for all the nodes is computed 
-                             with pre-processing in O(V)
+void reach_parent(int k) /*Ancestors (Count) for all the nodes is computed 
+                             with pre-processing in O(V)*/
 {
 	cntAncestors[k]=ct;
 	ct++;
@@ -123,15 +123,14 @@ void reach_child2(int k) /* Progeny (IDS) for kth node is stored in answer*/
 		reach_parent(it.id);
 	ct--;
 }
-
-void reach_parent2(int k) Ancestors (IDS) for kth node is stored in answer
+void reach_parent2(int k) /*Ancestors (IDS) for kth node is stored in answer*/
 {
 	while(parent[k])
 	{
 		k=parent[k];
 		answer.push_back(k);
 	}
-}*/
+}
 
 int main()
 {
@@ -155,6 +154,7 @@ int main()
         stringstream ss;
         ss << hex << element;
 
+        parent.push_back(element);
         string res = ss.str();
         string hex_id = "0x";
         hex_id.append(res);
@@ -194,6 +194,7 @@ int main()
             cout << "c - count the children of vertex\n";
             cout << "l - print list of children of vertex with requested id\n";
             cout << "m - print list of children of vertex with true/false flags\n";
+            cout << "r - count the parent of the vertex\n"
             cout << "h - print help message\n";
             exit(0);
             break;
@@ -209,11 +210,16 @@ int main()
         case 'm':
             conditional_list(flag1);
             break;
+        case 'r':
+            reach_parent2(ele);
+            break;
         default:
             cout << "Error : option not avaliable\n";
         }
+
         cout << "\n Want to continue?(y/n)\n";
         cin >> request;
+        
     } while (request == 'y');
 	
     return 0;
